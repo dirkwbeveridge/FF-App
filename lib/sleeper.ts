@@ -106,6 +106,22 @@ export interface DraftSnapshot {
   }[];
 }
 
+/** Every pick on the 2026 board with the slot that made it. */
+export async function loadAllPicks(): Promise<
+  { pid: string; slot: number; pickNo: number; isKeeper: boolean }[]
+> {
+  const drafts = await get<SleeperDraft[]>(`/league/${LEAGUE_2026}/drafts`);
+  const draft = drafts?.[0];
+  if (!draft) return [];
+  const picks = await get<SleeperPick[]>(`/draft/${draft.draft_id}/picks`);
+  return (picks ?? []).map((p) => ({
+    pid: p.player_id,
+    slot: p.draft_slot,
+    pickNo: p.pick_no,
+    isKeeper: !!p.is_keeper,
+  }));
+}
+
 export async function loadDraft(): Promise<DraftSnapshot | { error: string }> {
   const drafts = await get<SleeperDraft[]>(`/league/${LEAGUE_2026}/drafts`);
   const draft = drafts?.[0];
