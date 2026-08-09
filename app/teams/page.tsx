@@ -1,7 +1,7 @@
 import { getAnalysis, fmt, signed } from "@/lib/data";
 import { Panel, Note, Th, Td, PosChip, Stat } from "@/components/ui";
 
-export const metadata = { title: "Teams — 415 FC" };
+export const metadata = { title: "Teams — Bud Iceman" };
 
 const COHORT_ROWS: { key: string; label: string }[] = [
   { key: "champions", label: "Champions" },
@@ -41,7 +41,7 @@ export default function Teams() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[26px] font-semibold tracking-tight">Teams and cohorts</h1>
+        <h1 className="display text-[28px] font-bold uppercase tracking-tight" style={{ color: "var(--color-bears)" }}>Teams and cohorts</h1>
         <p className="mt-2 max-w-[880px] text-[14px] leading-relaxed text-muted">
           What separated the teams that made the playoffs from the ones that did not. With three
           champions the top row is anecdote; the playoff-vs-missed comparison, at 18 teams a side,
@@ -79,7 +79,7 @@ export default function Teams() {
         title="Cohort comparison"
         subtitle="Averages within each group. Read across a row to see how a trait tracks with success."
       >
-        <div className="overflow-x-auto">
+        <div className="scroll-x">
           <table className="w-full border-collapse">
             <thead>
               <tr>
@@ -168,7 +168,7 @@ export default function Teams() {
       )}
 
       <Panel title="Every team-season" subtitle="Sorted by season, then finish.">
-        <div className="overflow-x-auto">
+        <div className="scroll-x">
           <table className="w-full border-collapse">
             <thead>
               <tr>

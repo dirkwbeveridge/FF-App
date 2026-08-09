@@ -12,13 +12,11 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section
-      className={`rounded-lg border border-line bg-panel ${className}`}
-    >
+    <section className={`slab rounded-lg border border-line ${className}`}>
       {(title || subtitle) && (
         <header className="border-b border-line px-4 py-3">
           {title && (
-            <h2 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-chalk">
+            <h2 className="display text-[13px] font-bold uppercase tracking-[0.1em] text-chalk">
               {title}
             </h2>
           )}
@@ -101,12 +99,12 @@ export function Stat({
           ? "var(--color-warn)"
           : "var(--color-chalk)";
   return (
-    <div className="rounded-lg border border-line bg-panel px-3.5 py-3">
+    <div className="slab rounded-lg border border-line px-3.5 py-3">
       <div className="text-[10.5px] uppercase leading-tight tracking-[0.1em] text-muted">
         {label}
       </div>
       <div
-        className="mt-1.5 text-[22px] font-semibold leading-none tabular-nums"
+        className="display mt-1.5 text-[24px] font-bold leading-none tabular-nums"
         style={{ color }}
       >
         {value}

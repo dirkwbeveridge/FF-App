@@ -2,7 +2,7 @@ import { getAnalysis, fmt, signed } from "@/lib/data";
 import { Panel, Note, Th, Td, PosChip, Diverging } from "@/components/ui";
 import { POS_COLOR, type Analysis, type Pos } from "@/lib/types";
 
-export const metadata = { title: "Positional Value — 415 FC" };
+export const metadata = { title: "Positional Value — Bud Iceman" };
 
 const SKILL: Pos[] = ["QB", "RB", "WR", "TE"];
 
@@ -25,7 +25,7 @@ export default function Value() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[26px] font-semibold tracking-tight">Positional value</h1>
+        <h1 className="display text-[28px] font-bold uppercase tracking-tight" style={{ color: "var(--color-bears)" }}>Positional value</h1>
         <p className="mt-2 max-w-[880px] text-[14px] leading-relaxed text-muted">
           What each position has actually returned, by where it was taken. Value is points above
           replacement, where replacement is the midpoint between the last player the league is
@@ -62,12 +62,12 @@ export default function Value() {
         </Note>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-2">
         <Panel
           title="Hit and bust rates by round"
           subtitle="A 'hit' finished the season as a startable option at his position (QB1-12, RB1-24, WR1-30, TE1-10). A 'bust' finished more than 20 points below replacement."
         >
-          <div className="overflow-x-auto">
+          <div className="scroll-x">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
@@ -119,12 +119,12 @@ export default function Value() {
           </div>
         </Panel>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <Panel
             title="How fast each position leaves the board"
             subtitle="Average number gone by the end of each round. This is the scarcity you are actually racing."
           >
-            <div className="overflow-x-auto">
+            <div className="scroll-x">
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
@@ -162,7 +162,7 @@ export default function Value() {
             title="Replacement level"
             subtitle="What a position is worth zero against. Season points, 2025."
           >
-            <div className="overflow-x-auto">
+            <div className="scroll-x">
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
@@ -228,7 +228,7 @@ function ValueChart({
   const zero = y(0);
 
   return (
-    <div className="overflow-x-auto">
+    <div className="scroll-x">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full min-w-[680px]"

@@ -1,7 +1,7 @@
 import { getAnalysis, fmt } from "@/lib/data";
 import { Panel, Note, Th, Td } from "@/components/ui";
 
-export const metadata = { title: "Method — 415 FC" };
+export const metadata = { title: "Method — Bud Iceman" };
 
 export default function Method() {
   const A = getAnalysis();
@@ -13,7 +13,7 @@ export default function Method() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[26px] font-semibold tracking-tight">How this was built</h1>
+        <h1 className="display text-[28px] font-bold uppercase tracking-tight" style={{ color: "var(--color-bears)" }}>How this was built</h1>
         <p className="mt-2 max-w-[880px] text-[14px] leading-relaxed text-muted">
           Three seasons is a small sample and this page does not pretend otherwise. What follows is
           what was measured, what was assumed, where the assumptions were tested, and which
@@ -69,7 +69,7 @@ export default function Method() {
         </Note>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-2">
         <Panel
           title="The objective, and its calibration"
           subtitle="What the optimizer maximises, and how we know it is the right thing to maximise."
@@ -79,7 +79,8 @@ export default function Method() {
             two remaining for the flex, with a discount for bench depth. Three free parameters were
             fitted against what the 36 real teams actually scored.
           </p>
-          <table className="mt-3 w-full border-collapse">
+          <div className="scroll-x mt-3">
+            <table className="w-full border-collapse">
             <tbody>
               <tr className="border-b border-line/40">
                 <Td className="text-muted">Objective vs actual points for</Td>
@@ -107,6 +108,7 @@ export default function Method() {
               </tr>
             </tbody>
           </table>
+          </div>
           <Note>
             The bust floors are measured, not fitted: they come from what teams really got when they
             started a player they had not drafted. Because the parameter surface is nearly flat, the
@@ -125,7 +127,8 @@ export default function Method() {
             scaled by how much of it repeats from season to season: the signal that shows up all
             three years survives, the signal that flips does not.
           </p>
-          <table className="mt-3 w-full border-collapse">
+          <div className="scroll-x mt-3">
+            <table className="w-full border-collapse">
             <thead>
               <tr>
                 <Th>Position</Th>
@@ -151,6 +154,7 @@ export default function Method() {
               ))}
             </tbody>
           </table>
+          </div>
           <Note>
             Two earlier shrinkage schemes were rejected: pooling standard errors at a single pick
             over-shrank and erased the quarterback effect entirely, and estimating a separate factor

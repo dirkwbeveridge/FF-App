@@ -35,7 +35,7 @@ export default function Playbook() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[26px] font-semibold tracking-tight">The 2026 Draft Playbook</h1>
+        <h1 className="display text-[28px] font-bold uppercase tracking-tight" style={{ color: "var(--color-bears)" }}>The 2026 Draft Playbook</h1>
         <p className="mt-2 max-w-[820px] text-[14px] leading-relaxed text-muted">
           Every pick from the {LEAGUE.name}&rsquo;s {A.meta.seasons.join(", ")} drafts, rescored
           under this league&rsquo;s actual rules ({LEAGUE.scoring}) and joined to what the team
@@ -157,12 +157,12 @@ export default function Playbook() {
       </Panel>
 
       {/* ---------------------------------------------------------------- */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-2">
         <Panel
           title="What a pick is worth, by round and position"
           subtitle="Expected points above replacement for a player taken at the middle of each round. Shrunk toward the cross-position average in proportion to how well that position's edge repeats from season to season."
         >
-          <div className="overflow-x-auto">
+          <div className="scroll-x">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
@@ -219,7 +219,7 @@ export default function Playbook() {
           </Note>
         </Panel>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <Panel
             title="The three champions"
             subtitle="Small sample, so treat these as illustrations of the rules above rather than a template."
@@ -250,7 +250,7 @@ export default function Playbook() {
             title="What actually correlates with winning"
             subtitle={`Pearson r across all ${A.meta.n_team_seasons} team-seasons, with permutation p-values.`}
           >
-            <div className="overflow-x-auto">
+            <div className="scroll-x">
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
@@ -357,12 +357,12 @@ function Rule({
         : { c: "var(--color-bad)", t: "thin evidence" };
   return (
     <li className="flex gap-3.5">
-      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line text-[12px] font-semibold text-muted">
+      <span className="display mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[12px] font-bold" style={{ borderColor: "var(--color-bears)", color: "var(--color-bears-bright)" }}>
         {n}
       </span>
       <div>
         <div className="flex flex-wrap items-baseline gap-x-2">
-          <h3 className="text-[14px] font-semibold leading-snug">{head}</h3>
+          <h3 className="text-[14.5px] font-semibold leading-snug text-chalk">{head}</h3>
           <span
             className="rounded px-1.5 py-[1px] text-[10px] uppercase tracking-wide"
             style={{ color: tone.c, background: `color-mix(in srgb, ${tone.c} 14%, transparent)` }}
