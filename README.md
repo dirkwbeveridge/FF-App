@@ -95,7 +95,13 @@ the historical pace at that point. It polls every 15 seconds.
 
 ## Deployment
 
-Pushing to `main` builds a static export and publishes it to GitHub Pages via
+**One-time setup:** Pages has to be enabled by hand at
+**Settings → Pages → Build and deployment → Source: GitHub Actions**. The
+workflow cannot do this itself — creating a Pages site needs admin rights that
+the built-in `GITHUB_TOKEN` does not have. On a private repo this also needs
+GitHub Pro or above.
+
+After that, pushing to `main` builds a static export and publishes it via
 `.github/workflows/deploy.yml`. Three things make that work:
 
 - `output: "export"` in `next.config.ts` — Pages serves files, not Node

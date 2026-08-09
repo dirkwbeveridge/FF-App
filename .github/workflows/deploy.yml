@@ -41,11 +41,14 @@ jobs:
         # with an underscore — that would delete Next's entire _next/ bundle.
         run: touch out/.nojekyll
 
+      # Pages must be switched on ONCE by a repo admin:
+      #   Settings -> Pages -> Build and deployment -> Source: GitHub Actions
+      # `enablement: true` is deliberately not set here. Creating a Pages site
+      # needs admin rights, which the workflow's GITHUB_TOKEN does not have and
+      # cannot be granted through `permissions:` — it fails with "Resource not
+      # accessible by integration" and buries the real cause. Better to fail on
+      # the honest error ("Get Pages site failed: Not Found") than a misleading one.
       - uses: actions/configure-pages@v5
-        # Turns Pages on for the repo if it is not already, so no manual
-        # settings change is needed for the first deploy.
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
