@@ -30,6 +30,9 @@ export interface DraftDoc {
   notes: Record<string, string>;
   /** Round number -> plan note, plus "general" for the overall strategy. */
   plan: Record<string, string>;
+  /** Round number -> the pid you intend to take there. Chosen from a list, not
+   *  typed, so the round plan always resolves to a real player. */
+  roundTargets: Record<string, string>;
   /** Manager names for the other 11 slots, so the board reads like your league. */
   slotNames: Record<string, string>;
   updated: string;
@@ -44,6 +47,7 @@ export function emptyDoc(season = "2026"): DraftDoc {
     avoided: [],
     notes: {},
     plan: {},
+    roundTargets: {},
     slotNames: {},
     updated: new Date().toISOString(),
   };
@@ -180,6 +184,17 @@ export function useDraftDoc() {
     [update],
   );
 
+  const setRoundTarget = useCallback(
+    (round: number, pid: string | null) =>
+      update((d) => {
+        const roundTargets = { ...d.roundTargets };
+        if (pid) roundTargets[String(round)] = pid;
+        else delete roundTargets[String(round)];
+        return { ...d, roundTargets };
+      }),
+    [update],
+  );
+
   const setSlotName = useCallback(
     (slot: number, name: string) =>
       update((d) => ({ ...d, slotNames: { ...d.slotNames, [String(slot)]: name } })),
@@ -198,8 +213,8 @@ export function useDraftDoc() {
 
   return {
     doc, ready,
-    setPick, syncLive, toggleStar, toggleAvoid, setNote, setPlan, setSlotName,
-    resetBoard, resetAll, replaceDoc,
+    setPick, syncLive, toggleStar, toggleAvoid, setNote, setPlan, setRoundTarget,
+    setSlotName, resetBoard, resetAll, replaceDoc,
   };
 }
 

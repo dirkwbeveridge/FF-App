@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import keeperData from "@/data/derived/keeper.json";
+import strategy from "@/data/derived/strategy.json";
 import { useDraftDoc } from "@/lib/store";
 import { useSort, SortTh } from "@/components/sortable";
 import { POS_COLOR, POS_BG } from "@/lib/types";
@@ -25,6 +26,14 @@ const INELIGIBLE = (keeperData.ineligible as Row[])
   .sort((a, b) => a.drafted_2025_round - b.drafted_2025_round);
 const ACQUIRED = keeperData.acquired_not_drafted as Acquired[];
 const SENS = keeperData.sensitivity;
+const CHOSEN = keeperData.chosen as Row | null;
+const CONTENDERS = strategy.contenders as {
+  pid: string; name: string; pos: string; keep_round: number;
+  vorp_surplus: number; reliability: number | null;
+  market_value: number; proj_vorp: number; priced_at: number;
+  lineup_market: number; lineup_projection: number; lineup_value: number;
+}[];
+const MODEL_AGREES = strategy.lineup_model_agrees as boolean | null;
 
 const num = (n: number | null | undefined, d = 1) =>
   n === null || n === undefined ? "—" : n.toFixed(d);
@@ -93,14 +102,36 @@ export default function Keeper() {
         </p>
       </header>
 
-      {best && (
+      {CHOSEN && (
         <div className="slab rounded-lg border px-4 py-4" style={{ borderColor: "var(--color-bears)" }}>
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span
-              className="display text-[20px] font-bold uppercase"
-              style={{ color: "var(--color-bears-bright)" }}
-            >
-              Keep {best.name}
+            <span className="rounded px-2 py-[3px] text-[10.5px] font-bold uppercase tracking-[0.1em]"
+              style={{ background: "var(--color-bears)", color: "#fff" }}>
+              Declared
+            </span>
+            <span className="display text-[20px] font-bold uppercase"
+              style={{ color: "var(--color-bears-bright)" }}>
+              {CHOSEN.name}
+            </span>
+            <span className="text-[13px] text-muted">
+              kept at round {CHOSEN.keep_round} · pick {CHOSEN.keep_pick}
+            </span>
+          </div>
+          <p className="mt-2 max-w-[860px] text-[12.5px] leading-relaxed text-muted">
+            Round {CHOSEN.keep_round} is spent. You draft {strategy.picks.length} times, starting at
+            pick {strategy.picks[0]}, and you never take a quarterback — a second one cannot enter
+            the lineup. The <a href="/plan" className="underline decoration-dotted">draft plan</a> and{" "}
+            <a href="/board" className="underline decoration-dotted">board</a> are both built around
+            that.
+          </p>
+        </div>
+      )}
+
+      {best && (
+        <div className="slab rounded-lg border border-line px-4 py-4">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="display text-[15px] font-bold uppercase text-muted">
+              On VORP surplus alone: {best.name}
             </span>
             <span className="text-[13px] text-muted">
               at round {best.keep_round} · pick {best.keep_pick}
@@ -126,6 +157,86 @@ export default function Keeper() {
             )}
           </p>
         </div>
+      )}
+
+      {CONTENDERS.length > 0 && (
+        <section className="slab rounded-lg border px-0 py-0"
+          style={{ borderColor: MODEL_AGREES ? "var(--color-line)" : "var(--color-warn)" }}>
+          <header className="border-b border-line px-4 py-3">
+            <h2 className="display text-[13px] font-bold uppercase tracking-[0.1em]">
+              The same question, run as a full draft
+            </h2>
+            <p className="mt-1 max-w-[880px] text-[12px] leading-relaxed text-muted">
+              VORP surplus treats a point of quarterback the same as a point of running back. The
+              lineup simulator does not: it knows you start one QB and up to four RB/WR/TE, it knows
+              which pick you give up, and it is calibrated against what the league&rsquo;s 36 real
+              teams actually scored (r = {strategy.objective_r.toFixed(2)}). Each row is a full
+              16-round draft, simulated.
+            </p>
+          </header>
+          <div className="scroll-x">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="border-b border-line px-2.5 py-2 text-left text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted">Keep</th>
+                  <th className="border-b border-line px-2.5 py-2 text-right text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted">Cost</th>
+                  <th className="border-b border-line px-2.5 py-2 text-right text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted" title="Projection reliability for this position, measured over 12,322 player-weeks">Proj r</th>
+                  <th className="border-b border-line px-2.5 py-2 text-right text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted">VORP surp</th>
+                  <th className="border-b border-line px-2.5 py-2 text-right text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted" title="Priced by what a player taken at his ADP has historically returned">By market</th>
+                  <th className="border-b border-line px-2.5 py-2 text-right text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted" title="Priced by his raw 2026 projection, with no uncertainty">By proj</th>
+                  <th className="border-b border-line px-2.5 py-2 text-right text-[10.5px] font-semibold uppercase tracking-[0.08em]" style={{ color: "var(--color-bears-bright)" }} title="Projection regressed toward the market by this position's measured reliability">Blend</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CONTENDERS.map((c) => {
+                  const isChosen = c.pid === CHOSEN?.pid;
+                  const isBest = c.pid === CONTENDERS[0].pid;
+                  return (
+                    <tr key={c.pid} className="border-b border-line/40 last:border-0"
+                      style={{ background: isChosen ? "color-mix(in srgb, var(--color-bears) 10%, transparent)" : undefined }}>
+                      <td className="whitespace-nowrap px-2.5 py-1.5 text-[12.5px]">
+                        {c.name}
+                        {isChosen && <span className="ml-1.5 text-[9.5px] uppercase tracking-wide" style={{ color: "var(--color-bears-bright)" }}>yours</span>}
+                        {isBest && !isChosen && <span className="ml-1.5 text-[9.5px] uppercase tracking-wide text-warn">model&rsquo;s pick</span>}
+                      </td>
+                      <td className="px-2.5 py-1.5 text-right text-[12px] tabular-nums text-muted">R{c.keep_round}</td>
+                      <td className="px-2.5 py-1.5 text-right text-[12px] tabular-nums text-muted">{c.reliability?.toFixed(2) ?? "—"}</td>
+                      <td className="px-2.5 py-1.5 text-right text-[12px] tabular-nums text-muted">{signed(c.vorp_surplus)}</td>
+                      <td className="px-2.5 py-1.5 text-right text-[12px] tabular-nums text-muted">{num(c.lineup_market, 0)}</td>
+                      <td className="px-2.5 py-1.5 text-right text-[12px] tabular-nums text-muted">{num(c.lineup_projection, 0)}</td>
+                      <td className="px-2.5 py-1.5 text-right text-[13px] font-semibold tabular-nums"
+                        style={{ color: isBest ? "var(--color-good)" : "var(--color-chalk)" }}>
+                        {num(c.lineup_value, 0)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="border-t border-line px-4 py-3 text-[12.5px] leading-relaxed text-muted">
+            {MODEL_AGREES ? (
+              <>The simulator agrees with the VORP ranking, so the decision is settled from both
+                directions.</>
+            ) : (
+              <>
+                <strong className="text-warn">These disagree, and it matters.</strong>{" "}
+                {CHOSEN?.name} wins on VORP surplus and wins again if you price a keeper at his raw
+                projection — but that column hands a point forecast a certainty no drafted player
+                gets, and it leans hardest on the position whose projections are measured least
+                reliable (QB r = 0.39, against RB 0.69). Regress each projection toward what its
+                market price has historically returned, and{" "}
+                <strong className="text-chalk">{CONTENDERS[0].name}</strong> comes out{" "}
+                {Math.round(
+                  CONTENDERS[0].lineup_value -
+                    (CONTENDERS.find((c) => c.pid === CHOSEN?.pid)?.lineup_value ?? 0),
+                )}{" "}
+                points ahead. The mechanism is that only one quarterback can start, while a running
+                back fills two starting slots and both flexes.
+              </>
+            )}
+          </p>
+        </section>
       )}
 
       <section className="slab rounded-lg border border-line">

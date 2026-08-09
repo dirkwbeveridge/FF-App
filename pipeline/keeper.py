@@ -36,6 +36,11 @@ TEAMS = 12
 ROUNDS = 16
 REVERSAL = 3
 
+# The declared keeper for 2026. Single source of truth: the app reads it from
+# keeper.json and strategy.py plans the draft around it. Set to None to go back
+# to weighing the options rather than having decided.
+CHOSEN_PID = "11560"  # Caleb Williams, QB CHI — kept at round 10, pick 118
+
 
 def slot_picks(slot, teams=TEAMS, rounds=ROUNDS, reversal=REVERSAL):
     out = []
@@ -279,7 +284,15 @@ def main():
     print("   -> both conventions agree on the pick"
           if sensitivity["agrees"] else "   -> THE CONVENTIONS DISAGREE — decide on other grounds")
 
+    chosen = next((r for r in eligible if r["pid"] == CHOSEN_PID), None)
+    if CHOSEN_PID and not chosen:
+        raise SystemExit(f"CHOSEN_PID {CHOSEN_PID} is not an eligible keeper")
+    if chosen:
+        print(f"\nDECLARED: keeping {chosen['name']} at R{chosen['keep_round']}, "
+              f"pick {chosen['keep_pick']}")
+
     out = {
+        "chosen": chosen,
         "eligible": eligible,
         "ineligible": ineligible,
         "acquired_not_drafted": acquired,

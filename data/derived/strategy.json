@@ -1,0 +1,405 @@
+{
+ "my_slot": 10,
+ "keeper": {
+  "pid": "11560",
+  "name": "Caleb Williams",
+  "pos": "QB",
+  "round": 10,
+  "pick": 118,
+  "adp": 56.0,
+  "proj": 364.0,
+  "vorp": 120.3
+ },
+ "picks": [
+  10,
+  15,
+  27,
+  46,
+  51,
+  70,
+  75,
+  94,
+  99,
+  123,
+  142,
+  147,
+  166,
+  171,
+  190
+ ],
+ "rounds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "schedule": [
+  {
+   "round": 1,
+   "pick": 10,
+   "pos": "RB"
+  },
+  {
+   "round": 2,
+   "pick": 15,
+   "pos": "RB"
+  },
+  {
+   "round": 3,
+   "pick": 27,
+   "pos": "RB"
+  },
+  {
+   "round": 4,
+   "pick": 46,
+   "pos": "WR"
+  },
+  {
+   "round": 5,
+   "pick": 51,
+   "pos": "RB"
+  },
+  {
+   "round": 6,
+   "pick": 70,
+   "pos": "TE"
+  },
+  {
+   "round": 7,
+   "pick": 75,
+   "pos": "WR"
+  },
+  {
+   "round": 8,
+   "pick": 94,
+   "pos": "TE"
+  },
+  {
+   "round": 9,
+   "pick": 99,
+   "pos": "RB"
+  },
+  {
+   "round": 10,
+   "pick": 118,
+   "pos": "QB",
+   "keeper": true,
+   "name": "Caleb Williams"
+  },
+  {
+   "round": 11,
+   "pick": 123,
+   "pos": "WR"
+  },
+  {
+   "round": 12,
+   "pick": 142,
+   "pos": "WR"
+  },
+  {
+   "round": 13,
+   "pick": 147,
+   "pos": "WR"
+  },
+  {
+   "round": 14,
+   "pick": 166,
+   "pos": "TE"
+  },
+  {
+   "round": 15,
+   "pick": 171,
+   "pos": "K"
+  },
+  {
+   "round": 16,
+   "pick": 190,
+   "pos": "DEF"
+  }
+ ],
+ "best": {
+  "sequence": [
+   "RB",
+   "RB",
+   "RB",
+   "WR",
+   "RB",
+   "TE",
+   "WR",
+   "TE",
+   "RB",
+   "WR",
+   "WR",
+   "WR",
+   "TE"
+  ],
+  "mean": 293.9,
+  "median": 290.5,
+  "p25": 196.5,
+  "p75": 387.8,
+  "p10": 110.1,
+  "p90": 479.2
+ },
+ "alternatives": [
+  {
+   "sequence": [
+    "RB",
+    "RB",
+    "RB",
+    "WR",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "TE",
+    "WR",
+    "WR",
+    "WR",
+    "WR"
+   ],
+   "mean": 292.4,
+   "median": 285.1,
+   "p25": 193.7,
+   "p75": 387.1,
+   "p10": 106.3,
+   "p90": 484.0
+  },
+  {
+   "sequence": [
+    "RB",
+    "RB",
+    "RB",
+    "WR",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "TE",
+    "WR",
+    "WR",
+    "RB",
+    "WR"
+   ],
+   "mean": 290.5,
+   "median": 283.6,
+   "p25": 190.7,
+   "p75": 384.0,
+   "p10": 106.4,
+   "p90": 480.2
+  },
+  {
+   "sequence": [
+    "RB",
+    "RB",
+    "RB",
+    "WR",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "RB",
+    "WR",
+    "WR",
+    "RB",
+    "TE"
+   ],
+   "mean": 289.7,
+   "median": 287.2,
+   "p25": 191.9,
+   "p75": 382.6,
+   "p10": 111.3,
+   "p90": 468.0
+  },
+  {
+   "sequence": [
+    "RB",
+    "RB",
+    "RB",
+    "WR",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "TE",
+    "WR",
+    "WR",
+    "WR",
+    "RB"
+   ],
+   "mean": 289.3,
+   "median": 282.3,
+   "p25": 190.0,
+   "p75": 385.4,
+   "p10": 103.5,
+   "p90": 483.5
+  }
+ ],
+ "no_keeper_best": {
+  "sequence": [
+   "RB",
+   "RB",
+   "RB",
+   "WR",
+   "RB",
+   "TE",
+   "WR",
+   "TE",
+   "WR",
+   "WR",
+   "RB",
+   "QB",
+   "WR",
+   "TE"
+  ],
+  "mean": 246.5,
+  "median": 241.8,
+  "p25": 139.2,
+  "p75": 348.8,
+  "p10": 60.4,
+  "p90": 441.3
+ },
+ "delta": 47.4,
+ "contenders": [
+  {
+   "pid": "12481",
+   "name": "Cam Skattebo",
+   "pos": "RB",
+   "keep_round": 7,
+   "vorp_surplus": 17.0,
+   "priced_at": 88.5,
+   "market_value": 30.3,
+   "proj_vorp": 114.6,
+   "reliability": 0.691,
+   "lineup_market": 279.9,
+   "lineup_projection": 351.4,
+   "lineup_value": 322.9,
+   "sequence": [
+    "WR",
+    "RB",
+    "RB",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "WR",
+    "RB",
+    "QB",
+    "TE",
+    "WR",
+    "WR"
+   ]
+  },
+  {
+   "pid": "11560",
+   "name": "Caleb Williams",
+   "pos": "QB",
+   "keep_round": 10,
+   "vorp_surplus": 95.8,
+   "priced_at": 33.7,
+   "market_value": -21.0,
+   "proj_vorp": 120.3,
+   "reliability": 0.387,
+   "lineup_market": 261.0,
+   "lineup_projection": 381.6,
+   "lineup_value": 294.9,
+   "sequence": [
+    "RB",
+    "RB",
+    "RB",
+    "WR",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "RB",
+    "WR",
+    "WR",
+    "WR",
+    "TE"
+   ]
+  },
+  {
+   "pid": "8146",
+   "name": "Garrett Wilson",
+   "pos": "WR",
+   "keep_round": 2,
+   "vorp_surplus": -18.3,
+   "priced_at": 85.6,
+   "market_value": 15.3,
+   "proj_vorp": 128.1,
+   "reliability": 0.623,
+   "lineup_market": 226.2,
+   "lineup_projection": 330.3,
+   "lineup_value": 287.7,
+   "sequence": [
+    "WR",
+    "RB",
+    "RB",
+    "RB",
+    "TE",
+    "WR",
+    "TE",
+    "RB",
+    "QB",
+    "RB",
+    "WR",
+    "RB",
+    "TE"
+   ]
+  },
+  {
+   "pid": "8110",
+   "name": "Jake Ferguson",
+   "pos": "TE",
+   "keep_round": 11,
+   "vorp_surplus": 6.1,
+   "priced_at": 22.6,
+   "market_value": -23.3,
+   "proj_vorp": 52.8,
+   "reliability": 0.604,
+   "lineup_market": 246.2,
+   "lineup_projection": 304.5,
+   "lineup_value": 273.7,
+   "sequence": [
+    "RB",
+    "RB",
+    "RB",
+    "RB",
+    "WR",
+    "TE",
+    "WR",
+    "QB",
+    "RB",
+    "WR",
+    "WR",
+    "WR",
+    "TE"
+   ]
+  }
+ ],
+ "lineup_model_agrees": false,
+ "counts": {
+  "RB": 5,
+  "WR": 5,
+  "TE": 3,
+  "QB": 1
+ },
+ "counts_no_keeper": {
+  "RB": 5,
+  "WR": 5,
+  "TE": 3,
+  "QB": 1
+ },
+ "objective_r": 0.7567
+}
