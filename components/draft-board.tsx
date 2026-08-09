@@ -6,6 +6,7 @@ import analysis from "@/data/derived/analysis.json";
 import { useDraftDoc, exportDoc, importDoc, type Owner } from "@/lib/store";
 import { loadDraft, loadAllPicks, slotPicks, type DraftSnapshot } from "@/lib/sleeper";
 import { POS_COLOR, POS_BG } from "@/lib/types";
+import { useSort } from "@/components/sortable";
 
 interface Player {
   pid: string; name: string; pos: string; team: string | null;
@@ -29,6 +30,7 @@ export default function DraftBoard() {
   const [filter, setFilter] = useState<(typeof POSITIONS)[number]>("ALL");
   const [query, setQuery] = useState("");
   const [onlyStarred, setOnlyStarred] = useState(false);
+  const [hideAvoided, setHideAvoided] = useState(false);
   const [assignTo, setAssignTo] = useState<Owner>("me");
   const [snap, setSnap] = useState<DraftSnapshot | null>(null);
   const [syncing, setSyncing] = useState(false);
@@ -99,20 +101,21 @@ export default function DraftBoard() {
     return out;
   }, [myTeam]);
 
-  const available = useMemo(() => {
+  const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return PLAYERS.filter((p) => {
       if (takenBy[p.pid]) return false;
       if (filter !== "ALL" && p.pos !== filter) return false;
       if (onlyStarred && !doc.starred.includes(p.pid)) return false;
+      if (hideAvoided && doc.avoided.includes(p.pid)) return false;
       if (q && !p.name.toLowerCase().includes(q) && !(p.team ?? "").toLowerCase().includes(q))
         return false;
       return true;
-    }).sort((a, b) => {
-      const av = a.adp ?? 999, bv = b.adp ?? 999;
-      return av - bv;
     });
-  }, [takenBy, filter, onlyStarred, query, doc.starred]);
+  }, [takenBy, filter, onlyStarred, hideAvoided, query, doc.starred, doc.avoided]);
+
+  const { sorted: available, key: sortKey, dir: sortDir, toggle: toggleSort } =
+    useSort<Player>(filtered, "adp", "asc");
 
   /** Next pick of mine that hasn't happened yet. */
   const nextMyPick = useMemo(
@@ -298,6 +301,32 @@ export default function DraftBoard() {
                   className="h-3.5 w-3.5 accent-[var(--color-bears)]" />
                 targets
               </label>
+              <label className="flex items-center gap-1 text-[11.5px] text-muted">
+                <input type="checkbox" checked={hideAvoided}
+                  onChange={(e) => setHideAvoided(e.target.checked)}
+                  className="h-3.5 w-3.5 accent-[var(--color-bears)]" />
+                hide avoided
+              </label>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-[10.5px] uppercase tracking-[0.08em] text-muted">sort</span>
+              {([
+                ["adp", "ADP", "asc"],
+                ["proj", "Proj", "desc"],
+                ["value", "Value", "desc"],
+                ["vorp", "VORP", "desc"],
+                ["pos_rank", "Pos rank", "asc"],
+                ["name", "Name", "asc"],
+              ] as const).map(([k, label, d]) => (
+                <button key={k} onClick={() => toggleSort(k, d)}
+                  className="rounded border px-2 py-1 text-[11px] transition-colors"
+                  style={{
+                    borderColor: sortKey === k ? "var(--color-bears)" : "var(--color-line)",
+                    color: sortKey === k ? "var(--color-bears-bright)" : "var(--color-muted)",
+                  }}>
+                  {label}{sortKey === k ? (sortDir === "asc" ? " ▲" : " ▼") : ""}
+                </button>
+              ))}
             </div>
           </header>
 
