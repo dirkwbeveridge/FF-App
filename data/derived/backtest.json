@@ -1,0 +1,35 @@
+{
+ "n_team_weeks": 504,
+ "league_per_week": 1.79,
+ "league_wins_gained": 16,
+ "league_wins_lost": 11,
+ "mine": [
+  {
+   "season": "2023",
+   "owner": "dirkwbeveridge",
+   "per_week": 1.66,
+   "season_total": 23.2,
+   "wins_gained": 2,
+   "wins_lost": 0
+  },
+  {
+   "season": "2024",
+   "owner": "dirkwbeveridge",
+   "per_week": 1.79,
+   "season_total": 25.0,
+   "wins_gained": 1,
+   "wins_lost": 0
+  },
+  {
+   "season": "2025",
+   "owner": "dirkwbeveridge",
+   "per_week": 3.65,
+   "season_total": 51.1,
+   "wins_gained": 0,
+   "wins_lost": 0
+  }
+ ],
+ "gap_manager": 15.8,
+ "gap_tool": 14.0,
+ "gap_closed_pct": 11.0
+}

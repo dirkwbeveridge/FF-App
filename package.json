@@ -2,13 +2,13 @@
   "name": "ff-app",
   "version": "1.0.0",
   "private": true,
-  "description": "415 Football Club — draft intelligence and team management",
+  "description": "415 Football Club \u2014 draft intelligence and team management",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "data": "python3 pipeline/fetch.py && python3 pipeline/core.py && python3 pipeline/replacement.py && python3 pipeline/analyze.py"
+    "data": "python3 pipeline/fetch.py && python3 pipeline/core.py && python3 pipeline/replacement.py && python3 pipeline/analyze.py && python3 pipeline/projections.py && python3 pipeline/backtest.py"
   },
   "dependencies": {
     "next": "16.3.0",
