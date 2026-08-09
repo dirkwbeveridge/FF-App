@@ -1,5 +1,6 @@
 import { getAnalysis, fmt, signed } from "@/lib/data";
 import { Panel, Note, Th, Td, PosChip } from "@/components/ui";
+import PickTable from "@/components/pick-table";
 
 export const metadata = { title: "Pick History — Bud Iceman" };
 
@@ -104,73 +105,6 @@ export default function History() {
           </table>
         </div>
       </Panel>
-    </div>
-  );
-}
-
-function PickTable({
-  rows,
-  showFinish = false,
-}: {
-  rows: ReturnType<typeof getAnalysis>["pick_grades"];
-  showFinish?: boolean;
-}) {
-  return (
-    <div className="scroll-x">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <Th>Season</Th>
-            <Th align="right">Pick</Th>
-            <Th>Player</Th>
-            <Th>Pos</Th>
-            <Th>Manager</Th>
-            <Th align="right">Pts</Th>
-            <Th align="right">Finish</Th>
-            <Th align="right">Grade</Th>
-            {showFinish && <Th align="right">Team</Th>}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((p) => (
-            <tr key={`${p.season}-${p.pick_no}`} className="border-b border-line/40 last:border-0">
-              <Td className="text-muted tabular-nums">{p.season}</Td>
-              <Td align="right" className="tabular-nums text-muted">
-                {p.pick_no}
-              </Td>
-              <Td className="max-w-[150px] truncate" title={p.name}>
-                {p.name}
-              </Td>
-              <Td>
-                <PosChip pos={p.pos} size="sm" />
-              </Td>
-              <Td className="max-w-[110px] truncate text-muted" title={p.owner}>
-                {p.owner}
-              </Td>
-              <Td align="right" className="tabular-nums text-muted">
-                {fmt(p.pts_reg)}
-              </Td>
-              <Td align="right" className="tabular-nums text-muted">
-                {p.pos_label ?? "—"}
-              </Td>
-              <Td
-                align="right"
-                className="font-semibold tabular-nums"
-                style={{
-                  color: p.residual_vorp >= 0 ? "var(--color-good)" : "var(--color-bad)",
-                }}
-              >
-                {signed(p.residual_vorp)}
-              </Td>
-              {showFinish && (
-                <Td align="right" className="tabular-nums text-muted">
-                  {p.final_place ? `${p.final_place}${p.is_champion ? " 🏆" : ""}` : "—"}
-                </Td>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }

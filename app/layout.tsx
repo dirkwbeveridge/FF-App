@@ -28,6 +28,9 @@ export const viewport: Viewport = {
 
 const NAV = [
   { href: "/", label: "Playbook", short: "Play" },
+  { href: "/board", label: "Draft Board", short: "Board" },
+  { href: "/plan", label: "Draft Plan", short: "Plan" },
+  { href: "/keeper", label: "Keeper", short: "Keep" },
   { href: "/team", label: "Start / Sit", short: "Start" },
   { href: "/waivers", label: "Waivers", short: "Wire" },
   { href: "/live", label: "Live Draft", short: "Live" },
