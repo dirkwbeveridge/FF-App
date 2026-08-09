@@ -12,3 +12,6 @@ data/raw/
 # Python
 __pycache__/
 *.pyc
+
+# Build output
+out/

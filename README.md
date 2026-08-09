@@ -1,7 +1,10 @@
-# 415 Football Club — Draft Intelligence
+# Bud Iceman — 415 FC Draft Intelligence
 
 A web app for managing my team in the 415 Football Club (Sleeper), built around a
-study of the league's own draft history.
+study of the league's own draft history. Chicago Bears colours over an ice
+field, named for the team it dresses — see [docs/theme.md](docs/theme.md).
+
+**Live: https://dirkwbeveridge.github.io/FF-App/**
 
 Three completed seasons — 2023, 2024, 2025 — are pulled from Sleeper, every
 fantasy point is recomputed from raw stat lines under this league's scoring, and
@@ -50,8 +53,10 @@ Full reasoning, calibration and limitations are on the **Method** page.
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev
 ```
+
+Then open http://localhost:3000.
 
 Regenerate the study from Sleeper (needs Python 3, no packages):
 
@@ -84,6 +89,21 @@ builds without network access.
 
 ## Live draft
 
-`/live` reads the 2026 Sleeper draft directly — slot, keepers already off the
-board, your next pick, and how the positional run compares to the historical
-pace at that point.
+`/live` reads the 2026 Sleeper draft directly from the browser — slot, keepers
+already off the board, your next pick, and how the positional run compares to
+the historical pace at that point. It polls every 15 seconds.
+
+## Deployment
+
+Pushing to `main` builds a static export and publishes it to GitHub Pages via
+`.github/workflows/deploy.yml`. Three things make that work:
+
+- `output: "export"` in `next.config.ts` — Pages serves files, not Node
+- `BASE_PATH=/FF-App` at build time, because a project site is served from
+  `https://<user>.github.io/<repo>/` rather than the root
+- `out/.nojekyll`, without which Pages would strip Next's entire `_next/` bundle
+
+There is no server in production, so the live draft page calls Sleeper straight
+from the browser. That is only possible because Sleeper returns
+`access-control-allow-origin: *`; it was verified before the app was built
+around it.

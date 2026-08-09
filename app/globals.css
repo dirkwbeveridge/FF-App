@@ -1,37 +1,157 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Bud Iceman — Chicago Bears over a frozen field. See docs/theme.md.
+   --------------------------------------------------------------------------- */
 @theme {
-  --color-ink: #0a0e14;
-  --color-panel: #111823;
-  --color-panel-2: #171f2c;
-  --color-line: #232d3d;
-  --color-muted: #8494ab;
-  --color-chalk: #e8eef7;
+  /* Ice — the ground the app sits on */
+  --color-ink: #050b14; /* Deep Ice   */
+  --color-panel: #0b162a; /* Bears Navy */
+  --color-panel-2: #12233d; /* Glacier    */
+  --color-line: #1c3352; /* Rime       */
+  --color-muted: #7fb2d9; /* Frost      */
+  --color-chalk: #e8f1fa; /* Ice White  */
 
-  --color-qb: #f0a15e;
-  --color-rb: #5ec8a0;
-  --color-wr: #6aa8f0;
-  --color-te: #c58ef0;
-  --color-k: #8494ab;
-  --color-def: #8494ab;
+  /* Chicago Bears */
+  --color-bears: #c83803;
+  --color-bears-bright: #e85a1f;
 
-  --color-good: #4ec9a0;
-  --color-bad: #f0736a;
-  --color-warn: #f0c05e;
+  /* Positions — tuned for contrast on navy */
+  --color-qb: #f2a65a;
+  --color-rb: #5fd3a6;
+  --color-wr: #6fb3f2;
+  --color-te: #c99bf0;
+  --color-k: #7fb2d9;
+  --color-def: #7fb2d9;
+
+  --color-good: #4fd1a5;
+  --color-bad: #ff6b5e;
+  --color-warn: #f2c14e;
+
+  --font-display: var(--font-oswald), "Arial Narrow", sans-serif;
 }
 
 html {
   color-scheme: dark;
+  /* iOS: keep the ice behind the notch and home indicator */
+  background: var(--color-ink);
 }
 
 body {
-  background: var(--color-ink);
   color: var(--color-chalk);
   font-feature-settings: "tnum" 1;
   -webkit-font-smoothing: antialiased;
+  /* Deliberately NOT set: an opaque background here paints over body::before.
+     CSS paint order puts in-flow block backgrounds AFTER negative stacking
+     levels, so setting it hides the entire ice field. The ground colour lives
+     on <html> instead, which is painted as the canvas underneath everything. */
+  background: transparent;
+}
+
+/* The Iceman field: a glacial glow, a low Bears ember, and cracked-ice strata.
+   All CSS — no image requests, so it loads instantly on a phone. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      125% 95% at 10% -12%,
+      #1b3f66 0%,
+      #10294a 32%,
+      #0a1a30 58%,
+      transparent 78%
+    ),
+    radial-gradient(
+      100% 75% at 95% 106%,
+      color-mix(in srgb, var(--color-bears) 34%, transparent) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      60% 40% at 78% 22%,
+      rgba(140, 200, 255, 0.09) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #071021 0%, var(--color-ink) 55%, #04080f 100%);
+}
+
+/* Crystalline shards — thin diagonal strata suggesting cracked lake ice. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.9;
+  background-image:
+    repeating-linear-gradient(
+      114deg,
+      transparent 0 62px,
+      rgba(190, 228, 255, 0.14) 62px 63px,
+      transparent 63px 128px
+    ),
+    repeating-linear-gradient(
+      66deg,
+      transparent 0 91px,
+      rgba(160, 212, 255, 0.10) 91px 92px,
+      transparent 92px 190px
+    ),
+    repeating-linear-gradient(
+      2deg,
+      transparent 0 150px,
+      rgba(215, 238, 255, 0.07) 150px 151px,
+      transparent 151px 320px
+    );
+  mask-image: radial-gradient(150% 125% at 28% -5%, #000 0%, rgba(0,0,0,0.55) 55%, transparent 92%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    animation: drift 90s linear infinite alternate;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-34px, 18px, 0);
+  }
+}
+
+h1,
+h2,
+.display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
 }
 
 /* Tabular numerals everywhere numbers are compared down a column. */
 .tnum {
   font-variant-numeric: tabular-nums;
+}
+
+/* Panels read as ice slabs: a lit top edge over a translucent navy body.
+   min-width:0 matters as much as the look: grid and flex children default to
+   min-width:auto, so without it a wide table refuses to shrink and shoves the
+   whole page sideways on a phone instead of scrolling inside its own box. */
+.slab {
+  min-width: 0;
+  background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  backdrop-filter: blur(9px) saturate(115%);
+  box-shadow:
+    inset 0 1px 0 rgba(190, 225, 255, 0.07),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* Let wide tables scroll inside their own box rather than the page. */
+.scroll-x {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }

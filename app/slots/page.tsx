@@ -2,7 +2,7 @@ import { getAnalysis, fmt, signed } from "@/lib/data";
 import { Panel, SeqStrip, Note, Th, Td, PosChip } from "@/components/ui";
 import type { Pos } from "@/lib/types";
 
-export const metadata = { title: "Draft Slots — 415 FC" };
+export const metadata = { title: "Draft Slots — Bud Iceman" };
 
 export default function Slots() {
   const A = getAnalysis();
@@ -20,7 +20,7 @@ export default function Slots() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[26px] font-semibold tracking-tight">Draft slots</h1>
+        <h1 className="display text-[28px] font-bold uppercase tracking-tight" style={{ color: "var(--color-bears)" }}>Draft slots</h1>
         <p className="mt-2 max-w-[860px] text-[14px] leading-relaxed text-muted">
           For each of the 12 slots, the position sequence that maximises expected starting-lineup
           value, found by beam search over a Monte Carlo model of this league&rsquo;s own draft.
@@ -48,7 +48,7 @@ export default function Slots() {
         </p>
       </Panel>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
         {slots.map((slot) => {
           const o = A.optimal_by_slot[String(slot)];
           const hist = A.slots.find((s) => s.slot === slot);
@@ -110,7 +110,7 @@ export default function Slots() {
           title="Named strategies, scored at every slot"
           subtitle="Expected starting-lineup value. The columns are draft slots. This is the clearest way to see how little the choice of shape buys you — and how much a bad QB plan costs."
         >
-          <div className="overflow-x-auto">
+          <div className="scroll-x">
             <table className="w-full border-collapse">
               <thead>
                 <tr>

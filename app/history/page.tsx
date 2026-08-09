@@ -1,7 +1,7 @@
 import { getAnalysis, fmt, signed } from "@/lib/data";
 import { Panel, Note, Th, Td, PosChip } from "@/components/ui";
 
-export const metadata = { title: "Pick History — 415 FC" };
+export const metadata = { title: "Pick History — Bud Iceman" };
 
 export default function History() {
   const A = getAnalysis();
@@ -18,7 +18,7 @@ export default function History() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[26px] font-semibold tracking-tight">Every pick, graded</h1>
+        <h1 className="display text-[28px] font-bold uppercase tracking-tight" style={{ color: "var(--color-bears)" }}>Every pick, graded</h1>
         <p className="mt-2 max-w-[880px] text-[14px] leading-relaxed text-muted">
           Each pick scored against what a pick at that number has historically returned. A positive
           grade means the player beat the slot he was taken at; negative means he did not. Keepers
@@ -26,7 +26,7 @@ export default function History() {
         </p>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-2">
         <Panel
           title="The 20 best picks"
           subtitle="Value above what that pick number normally returns."
@@ -57,7 +57,7 @@ export default function History() {
         title="Passed over"
         subtitle="Picks where a much better player at the same position went within the next two rounds. This is opportunity cost made concrete."
       >
-        <div className="overflow-x-auto">
+        <div className="scroll-x">
           <table className="w-full border-collapse">
             <thead>
               <tr>
@@ -116,7 +116,7 @@ function PickTable({
   showFinish?: boolean;
 }) {
   return (
-    <div className="overflow-x-auto">
+    <div className="scroll-x">
       <table className="w-full border-collapse">
         <thead>
           <tr>
