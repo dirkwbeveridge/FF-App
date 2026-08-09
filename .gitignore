@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+.env*.local
+
+# Raw Sleeper dump is large and fully reproducible via `npm run data`.
+data/raw/
+
+# Python
+__pycache__/
+*.pyc

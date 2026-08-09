@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0a0e14;
+  --color-panel: #111823;
+  --color-panel-2: #171f2c;
+  --color-line: #232d3d;
+  --color-muted: #8494ab;
+  --color-chalk: #e8eef7;
+
+  --color-qb: #f0a15e;
+  --color-rb: #5ec8a0;
+  --color-wr: #6aa8f0;
+  --color-te: #c58ef0;
+  --color-k: #8494ab;
+  --color-def: #8494ab;
+
+  --color-good: #4ec9a0;
+  --color-bad: #f0736a;
+  --color-warn: #f0c05e;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-chalk);
+  font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular numerals everywhere numbers are compared down a column. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}

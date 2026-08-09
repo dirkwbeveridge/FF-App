@@ -1,0 +1,28 @@
+{
+  "name": "ff-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "415 Football Club — draft intelligence and team management",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "data": "python3 pipeline/fetch.py && python3 pipeline/core.py && python3 pipeline/replacement.py && python3 pipeline/analyze.py"
+  },
+  "dependencies": {
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "playwright": "^1.62.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.7.0"
+  }
+}
