@@ -1,0 +1,38 @@
+{
+ "QB": {
+  "drafted_starts": 401,
+  "waiver_starts": 103,
+  "waiver_share": 0.204,
+  "drafted_ppg": 20.27,
+  "waiver_ppg": 17.69,
+  "gap_ppg": 2.59,
+  "replacement_floor_season": -36.2
+ },
+ "RB": {
+  "drafted_starts": 1095,
+  "waiver_starts": 222,
+  "waiver_share": 0.169,
+  "drafted_ppg": 15.84,
+  "waiver_ppg": 12.67,
+  "gap_ppg": 3.16,
+  "replacement_floor_season": -44.3
+ },
+ "WR": {
+  "drafted_starts": 1408,
+  "waiver_starts": 257,
+  "waiver_share": 0.154,
+  "drafted_ppg": 14.87,
+  "waiver_ppg": 11.37,
+  "gap_ppg": 3.5,
+  "replacement_floor_season": -49.0
+ },
+ "TE": {
+  "drafted_starts": 387,
+  "waiver_starts": 159,
+  "waiver_share": 0.291,
+  "drafted_ppg": 12.71,
+  "waiver_ppg": 10.89,
+  "gap_ppg": 1.82,
+  "replacement_floor_season": -25.4
+ }
+}
