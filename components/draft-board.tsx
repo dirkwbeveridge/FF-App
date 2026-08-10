@@ -3,15 +3,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import pool from "@/data/derived/pool.json";
 import analysis from "@/data/derived/analysis.json";
+import strategy from "@/data/derived/strategy.json";
 import { useDraftDoc, exportDoc, importDoc, type Owner } from "@/lib/store";
 import { loadDraft, loadAllPicks, slotPicks, type DraftSnapshot } from "@/lib/sleeper";
 import { POS_COLOR, POS_BG } from "@/lib/types";
 import { useSort } from "@/components/sortable";
+import PlayerPicker, { type PickablePlayer } from "@/components/player-picker";
 
-interface Player {
-  pid: string; name: string; pos: string; team: string | null;
-  adp: number | null; proj: number; vorp: number; pos_rank: number;
-  value: number | null; injury: string | null; bye: number | null;
+interface Player extends PickablePlayer {
+  vorp: number;
+  value: number | null;
+  injury: string | null;
+  bye: number | null;
 }
 
 const PLAYERS = (pool.players as Player[]).filter((p) => p.adp != null || p.proj > 40);
@@ -19,6 +22,7 @@ const TEAMS = 12;
 const ROUNDS = 16;
 const POSITIONS = ["ALL", "QB", "RB", "WR", "TE", "K", "DEF"] as const;
 const LINEUP_NEED: Record<string, number> = { QB: 1, RB: 2, WR: 2, TE: 1, K: 1, DEF: 1 };
+const KEEPER = strategy.keeper;
 
 export default function DraftBoard() {
   const {
@@ -68,8 +72,17 @@ export default function DraftBoard() {
     pullLive();
   }, [pullLive]);
 
+  // The keeper is already yours, so he is on the board before a pick is made and
+  // the round he costs is not a pick you get to use. Seeded once; a Sleeper sync
+  // will overwrite it with the real thing the moment the league records it.
+  useEffect(() => {
+    if (!ready) return;
+    if (!doc.picks[KEEPER.pid]) setPick(KEEPER.pid, "me", KEEPER.pick);
+  }, [ready, doc.picks, setPick]);
+
   const myPickNumbers = useMemo(
-    () => slotPicks(mySlot, TEAMS, ROUNDS, 3),
+    () => slotPicks(mySlot, TEAMS, ROUNDS, 3)
+      .filter((p) => !(mySlot === strategy.my_slot && p === KEEPER.pick)),
     [mySlot],
   );
 
@@ -117,13 +130,28 @@ export default function DraftBoard() {
   const { sorted: available, key: sortKey, dir: sortDir, toggle: toggleSort } =
     useSort<Player>(filtered, "adp", "asc");
 
-  /** Next pick of mine that hasn't happened yet. */
+  /**
+   * Where the draft actually is.
+   *
+   * Not the number of players on the board: keepers are recorded against their
+   * own pick numbers up front, so nine of them sit there before a single pick
+   * has been made, and counting bodies puts the clock nine picks fast. The
+   * draft is at the first pick number nobody has filled.
+   */
+  const nextOverall = useMemo(() => {
+    const filled = new Set<number>();
+    for (const p of Object.values(takenBy)) if (p.pickNo != null) filled.add(p.pickNo);
+    let n = 1;
+    while (n <= TEAMS * ROUNDS && filled.has(n)) n++;
+    return n;
+  }, [takenBy]);
+
   const nextMyPick = useMemo(
-    () => myPickNumbers.find((n) => n > takenCount) ?? null,
-    [myPickNumbers, takenCount],
+    () => myPickNumbers.find((n) => n >= nextOverall) ?? null,
+    [myPickNumbers, nextOverall],
   );
   const nextRound = nextMyPick ? Math.ceil(nextMyPick / TEAMS) : null;
-  const picksUntilMine = nextMyPick ? nextMyPick - takenCount - 1 : null;
+  const picksUntilMine = nextMyPick ? nextMyPick - nextOverall : null;
 
   /** What the study says each position is worth in the round I'm picking in. */
   const roundValue = useMemo(() => {
@@ -143,7 +171,7 @@ export default function DraftBoard() {
     s === mySlot ? "You" : doc.slotNames[String(s)] || `Slot ${s}`;
 
   const draft = (pid: string) => {
-    setPick(pid, assignTo, takenCount + 1);
+    setPick(pid, assignTo, nextOverall);
   };
 
   if (!ready) return <p className="text-[13px] text-muted">Loading board&hellip;</p>;
@@ -275,6 +303,22 @@ export default function DraftBoard() {
                     .filter((s) => s !== mySlot)
                     .map((s) => <option key={s} value={s}>{slotLabel(s)}</option>)}
                 </select>
+              </div>
+            </div>
+            {/* Record a pick by name. Faster than scrolling to a player when
+                someone three seats over takes a name you half-heard. */}
+            <div className="flex items-center gap-2">
+              <span className="shrink-0 text-[10.5px] uppercase tracking-[0.08em] text-muted">
+                record
+              </span>
+              <div className="min-w-0 flex-1">
+                <PlayerPicker
+                  players={available}
+                  onPick={(p) => draft(p.pid)}
+                  placeholder={
+                    assignTo === "me" ? "Draft a player by name…" : `${slotLabel(assignTo as number)} took…`
+                  }
+                />
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-1.5">

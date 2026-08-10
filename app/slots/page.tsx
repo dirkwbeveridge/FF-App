@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { getAnalysis, fmt, signed } from "@/lib/data";
 import { Panel, SeqStrip, Note, Th, Td, PosChip } from "@/components/ui";
 import type { Pos } from "@/lib/types";
+import strategy from "@/data/derived/strategy.json";
 
 export const metadata = { title: "Draft Slots — Bud Iceman" };
 
@@ -28,6 +30,26 @@ export default function Slots() {
           for the kind of player available at that pick.
         </p>
       </header>
+
+      <Panel
+        title={`Slot ${strategy.my_slot} does not apply to you any more`}
+        subtitle="These twelve sequences assume you draft all 16 rounds and have no keeper. You do."
+      >
+        <p className="max-w-[900px] text-[13px] leading-relaxed text-muted">
+          You kept <strong className="text-chalk">{strategy.keeper.name}</strong>, which spends round{" "}
+          {strategy.keeper.round} and fills the only quarterback slot you can start. Your real
+          sequence runs over {strategy.picks.length} picks with QB removed from the search
+          altogether:
+        </p>
+        <div className="mt-3">
+          <SeqStrip seq={strategy.best.sequence as Pos[]} />
+        </div>
+        <Note>
+          The generic slot-{strategy.my_slot} answer below is kept for reference and for reading the
+          other eleven managers. Yours lives on the{" "}
+          <Link href="/plan" className="underline decoration-dotted">draft plan</Link>.
+        </Note>
+      </Panel>
 
       <Panel
         title="Read this first"

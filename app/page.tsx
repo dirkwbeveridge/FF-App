@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAnalysis, LEAGUE, fmt, signed } from "@/lib/data";
 import { Panel, Stat, SeqStrip, PosChip, Note, Th, Td, Diverging } from "@/components/ui";
 import type { Analysis, Pos } from "@/lib/types";
+import strategy from "@/data/derived/strategy.json";
 
 export default function Playbook() {
   const A = getAnalysis();
@@ -43,6 +44,68 @@ export default function Playbook() {
           team-seasons, three champions.
         </p>
       </header>
+
+      {/* ---- your actual 2026 draft, given the keeper ---- */}
+      <Panel
+        title="Your draft, as it now stands"
+        subtitle={`Keeper declared: ${strategy.keeper.name}. Everything below is the league study; this panel is your own board.`}
+      >
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 text-[13px]">
+          <span>
+            <span className="text-muted">Slot </span>
+            <span className="font-semibold">{strategy.my_slot}</span>
+          </span>
+          <span>
+            <span className="text-muted">Keeper </span>
+            <span className="font-semibold">{strategy.keeper.name}</span>
+            <span className="text-muted"> at R{strategy.keeper.round} (pick {strategy.keeper.pick})</span>
+          </span>
+          <span>
+            <span className="text-muted">Picks left </span>
+            <span className="font-semibold tabular-nums">{strategy.picks.length}</span>
+          </span>
+          <span>
+            <span className="text-muted">Shape </span>
+            <span className="font-semibold">
+              {(["RB", "WR", "TE", "QB"] as const)
+                .filter((p) => (strategy.counts as Record<string, number>)[p])
+                .map((p) => `${(strategy.counts as Record<string, number>)[p]}${p}`)
+                .join(" · ")}
+            </span>
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-1">
+          {(strategy.schedule as { round: number; pick: number; pos: string; keeper?: boolean }[]).map((s) => (
+            <span
+              key={s.round}
+              className="rounded px-1.5 py-1 text-[11px] leading-none"
+              style={{
+                color: "var(--color-chalk)",
+                background: s.keeper
+                  ? "color-mix(in srgb, var(--color-bears) 35%, transparent)"
+                  : "var(--color-panel-2)",
+                border: s.keeper ? "1px solid var(--color-bears)" : "1px solid var(--color-line)",
+              }}
+            >
+              <span className="text-muted">R{s.round}</span>{" "}
+              <PosChip pos={s.pos} size="sm" />
+            </span>
+          ))}
+        </div>
+        <Note>
+          Keeping {strategy.keeper.name} is worth {signed(strategy.delta)} to the lineup this draft
+          ends up fielding, against keeping nobody. The shape barely moves — the gain is that your
+          quarterback arrives free at round {strategy.keeper.round} instead of costing a pick.{" "}
+          {strategy.lineup_model_agrees === false && (
+            <>
+              The simulator would rather you had kept{" "}
+              <strong className="text-warn">{strategy.contenders[0].name}</strong>; see{" "}
+              <Link href="/keeper" className="underline decoration-dotted">Keeper</Link> for why the
+              two methods disagree.
+            </>
+          )}
+        </Note>
+      </Panel>
 
       {/* ---------------------------------------------------------------- */}
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

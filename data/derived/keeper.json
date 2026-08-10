@@ -1,4 +1,28 @@
 {
+ "chosen": {
+  "pid": "11560",
+  "name": "Caleb Williams",
+  "pos": "QB",
+  "team": "CHI",
+  "pos_rank": 7,
+  "proj": 364.0,
+  "vorp": 120.3,
+  "adp": 56.0,
+  "drafted_2025_round": 11,
+  "drafted_2025_pick": 127,
+  "drafted_2025_label": "11.7",
+  "was_keeper_2025": false,
+  "on_roster_at_seasons_end": true,
+  "eligible": true,
+  "reason": null,
+  "keep_round": 10,
+  "keep_pick": 118,
+  "keep_label": "10.10",
+  "pick_normally_worth": 24.5,
+  "player_likely_there": "Bryce Young",
+  "surplus": 95.8,
+  "would_last_to_keep_pick": false
+ },
  "eligible": [
   {
    "pid": "11560",

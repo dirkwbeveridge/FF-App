@@ -755,9 +755,13 @@ class DraftModel:
         total += self.bench_w * sum(v for v in bench if v > 0)
         return total
 
-    def plan(self, slot, sequence):
-        """Resolve a strategy into the (position, positional-rank) it actually buys."""
-        picks = snake_picks(slot)
+    def plan(self, slot, sequence, picks=None):
+        """Resolve a strategy into the (position, positional-rank) it actually buys.
+
+        `picks` overrides the slot's natural pick numbers, which is what a keeper
+        needs: keeping a player spends one of your picks, so the remaining
+        sequence runs over a shorter list."""
+        picks = picks if picks is not None else snake_picks(slot)
         taken = Counter()
         out = []
         for rd, pos in enumerate(sequence):
@@ -768,13 +772,21 @@ class DraftModel:
             out.append((pos, j))
         return out
 
-    def evaluate(self, slot, sequence, trials=4000, seed=1):
-        """sequence: list of positions, one per round (K/DEF included)."""
+    def evaluate(self, slot, sequence, trials=4000, seed=1, picks=None, owned=None):
+        """sequence: list of positions, one per round (K/DEF included).
+
+        `owned` is a list of (pos, pick_no) for players you already have — a
+        keeper. He is priced at the pick his market says he costs, not at the
+        pick you actually pay, and drawn from the same empirical distribution as
+        anyone taken there. That matters: his 2026 projection is a forecast and
+        this model is calibrated on realised outcomes, so dropping a raw
+        projection in would credit him with a certainty no drafted player gets.
+        """
         rng = random.Random(seed)
         # The scarcity lookup is identical across trials — resolve it once and
         # let the trials do nothing but draw and score.
-        picks = snake_picks(slot)
-        plan = self.plan(slot, sequence)
+        picks = picks if picks is not None else snake_picks(slot)
+        plan = self.plan(slot, sequence, picks)
         skill_picks = [pk for pk, pos in zip(picks, sequence) if pos in SKILL]
         pools = []
         mine = Counter()
@@ -793,6 +805,23 @@ class DraftModel:
                 shrunk = self.shrunk_mean(pos, pick_no)
                 if shrunk is not None:
                     decay += statistics.mean(samples) - shrunk
+            pools.append((pos, samples, decay))
+
+        for entry in (owned or []):
+            # (pos, pick_no) prices him by the market; (pos, pick_no, value)
+            # pins him to a value you supply, e.g. his own projection.
+            if len(entry) == 3:
+                pools.append((entry[0], [entry[2]], 0.0))
+                continue
+            pos, pick_no = entry
+            samples = self.pick_pool(pos, pick_no)
+            decay = 0.0
+            if samples is None:
+                samples = [self.tail[pos]]
+            else:
+                shrunk = self.shrunk_mean(pos, pick_no)
+                if shrunk is not None:
+                    decay = statistics.mean(samples) - shrunk
             pools.append((pos, samples, decay))
 
         choice = rng.choice
